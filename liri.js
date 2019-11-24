@@ -1,21 +1,32 @@
-//Sets enviromental variables into process.env from a .env file.  These values are used within this computer only.
+//Sets enviromental letiables into process.env from a .env file.  These values are used within this computer only.
 require("dotenv").config();
 
-//These variables get access to the npm's needed for each of the created functions.
-var Spotify = require("node-spotify-api");
-var keys = require("./keys.js");
-var axios = require("axios");
-var moment = require("moment");
-var fs = require("fs");
-var spotify = new Spotify(keys.spotify);
+//These letiables get access to the npm's needed for each of the created functions.
+let Spotify = require("node-spotify-api");
+let keys = require("./keys.js");
+let axios = require("axios");
+let moment = require("moment");
+let fs = require("fs");
+let spotify = new Spotify(keys.spotify);
 
-var getArtistNames = function(artist) {
+//argv[2] chooses users actions; argv[3] is input parameter, ie; movie title
+var userCommand = process.argv[2];
+var userEntry = process.argv[3];
+
+//concatenate multiple words in 2nd user argument
+for (var i = 4; i < process.argv.length; i++) {
+  userEntry += "+" + process.argv[i];
+}
+
+// Writes to the log.txt file
+let getArtistNames = function(artist) {
   return artist.name;
 };
 
-var getSpotify = function(songName) {
+// Function for running a Spotify search - Command is spotify-this-song
+let getSpotify = function(songName) {
   if (songName === undefined) {
-    songName = "What's my age again";
+    songName = "The sign";
   }
   spotify.search(
     {
@@ -24,10 +35,10 @@ var getSpotify = function(songName) {
     },
     function(err, data) {
       if (err) {
-        console.log(err);
+        console.log("Error occured: " + err);
         return;
       }
-      var songs = data.tracks.items;
+      let songs = data.tracks.items;
 
       for (var i = 0; i < songs.length; i++) {
         console.log(i);
@@ -40,52 +51,118 @@ var getSpotify = function(songName) {
     }
   );
 };
-var getMyBands = function(artist) {
-  var queryURL =
+// Function for running a Bands in Town search - Command is concert-this
+let getMyBands = function(artist) {
+  let queryURL =
     "https://rest.bandsintown.com/artists/" +
     artist +
     "/events?app_id=codingbootcamp";
   axios.get(queryURL).then(function(response) {
-    var jsonData = response.data;
+    let jsonData = response.data;
 
     if (!jsonData.length) {
       console.log(artist);
       return;
     }
-    console.log("Upcoming concerts for : " + artist);
+    console.log("Upcoming concerts for : " + artist + " " + "will be held at ");
+    console.log("------------------------------------------------------------");
+
     for (var i = 0; i < jsonData.length; i++) {
-      var show = jsonData[i];
+      let show = jsonData[i];
       console.log(
-        show.venue.city +
-          "," +
-          (show.venue.region || show.venue.country) +
-          " at " +
-          show.venue.name +
+        show.venue.name +
           " " +
-          moment(show.datetime).format("DD/MM/YYYY")
+          "in " +
+          "" +
+          show.venue.city +
+          ", " +
+          (show.venue.region || show.venue.country) +
+          " on " +
+          moment(show.datetime).format("MM/DD/YYYY")
       );
     }
   });
 };
-var getMovie = function(movieName) {
+
+// Function for running a OMDB search via axios - Command is movie-this
+let getMovie = function(movieName) {
   if (movieName === undefined) {
     movieName = "Mr Nobody";
+
+    console.log("-----------------------------------");
+    console.log("If you haven't watched 'Mr Nobody', then you should:");
+    console.log("It's on Netflix");
   }
-  var urlHit =
+  let urlHit =
     "http://www.omdbapi.com/?t=" +
     movieName +
     "&y=&plot=full&tomatoes=true&apikey=71f33c86";
   axios.get(urlHit).then(function(response) {
-    var jsonData = response.data;
+    let jsonData = response.data;
 
     console.log("Title: " + jsonData.Title);
     console.log("Year: " + jsonData.Year);
-    console.log("Rated: " + jsonData.Rated);
     console.log("IMDB Rating: " + jsonData.imdbRating);
+    console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value);
     console.log("Country: " + jsonData.Country);
     console.log("Language: " + jsonData.Language);
     console.log("Plot: " + jsonData.Plot);
     console.log("Actors: " + jsonData.Actors);
-    console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value);
   });
 };
+
+// Function for running a search via randox.txt file - Command is do-what-it-says
+let doWhat = function(userCommand) {
+  fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) {
+      console.log("Error occurred: " + err);
+      return;
+    }
+    //splitting each string in the txt file by the comma
+    data = data.split(",");
+    let userCommand = "";
+
+    //determining how to parse the data if there is more than one item
+    if (data.length === 2) {
+      userCommand = data[0];
+      userEntry = data[1];
+    } else {
+      //using the data in the txt sheet as the command if only one value
+      userCommand = data[0];
+    }
+    if (userCommand === "spotify-this-song") {
+      getSpotify();
+    } else {
+      //if the user entry isn't a valid command
+      console.log("I Don't Know That Command...");
+    }
+  });
+};
+
+//Switch command
+function mySwitch(userCommand) {
+  //choose which statement (userCommand) to switch to and execute
+  switch (userCommand) {
+    case "concert-this":
+      getMyBands(userEntry);
+      break;
+
+    case "spotify-this-song":
+      getSpotify(userEntry);
+      break;
+
+    case "movie-this":
+      getMovie(userEntry);
+      break;
+
+    case "do-what-it-says":
+      doWhat(userEntry);
+      break;
+
+    default:
+      return console.log(
+        "\nI don't know \"" + userCommand + '" as a command.\n'
+      );
+  }
+}
+mySwitch(userCommand);

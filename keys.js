@@ -1,5 +1,3 @@
-console.log("this is loaded");
-
 //holds my Spotify keys
 exports.spotify = {
   id: process.env.SPOTIFY_ID,
