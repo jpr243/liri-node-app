@@ -9,7 +9,8 @@ This searches the Bands in Town Artist Events AP for an artist and renders the f
     Venue location
     Date of the Event (using moment format "MM/DD/YYY")
     
-    (/images/concert-this.png)
+  
+  
 
 
 ## spotify-this-song
