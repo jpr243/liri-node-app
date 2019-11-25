@@ -10,7 +10,7 @@ let fs = require("fs");
 let spotify = new Spotify(keys.spotify);
 
 //argv[2] chooses users actions; argv[3] is input parameter, ie; movie title
-var userCommand = process.argv[2];
+let userCommand = process.argv[2];
 var userEntry = process.argv[3];
 
 //concatenate multiple words in 2nd user argument
@@ -111,27 +111,23 @@ let getMovie = function(movieName) {
   });
 };
 
-// Function for running a search via randox.txt file - Command is do-what-it-says
-let doWhat = function(userCommand) {
+//Function for running a search via randox.txt file - Command is do-what-it-says
+let doWhat = function() {
   fs.readFile("random.txt", "utf8", function(err, data) {
     if (err) {
       console.log("Error occurred: " + err);
       return;
     }
     //splitting each string in the txt file by the comma
-    data = data.split(",");
-    let userCommand = "";
+    var dataArray = data.split(",");
 
-    //determining how to parse the data if there is more than one item
-    if (data.length === 2) {
-      userCommand = data[0];
-      userEntry = data[1];
-    } else {
-      //using the data in the txt sheet as the command if only one value
-      userCommand = data[0];
-    }
-    if (userCommand === "spotify-this-song") {
-      getSpotify();
+    if (dataArray[0] === "spotify-this-song") {
+      getSpotify(dataArray[1]);
+    } else if (dataArray[0] === "movie-this") {
+      getMovie(dataArray[1]);
+      //Concert-this is not working
+    } else if (dataArray[0] === "concert-this") {
+      getMyBands(dataArray[1]);
     } else {
       //if the user entry isn't a valid command
       console.log("I Don't Know That Command...");
