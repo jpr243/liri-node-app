@@ -26,7 +26,7 @@ let getArtistNames = function(artist) {
 // Function for running a Spotify search - Command is spotify-this-song
 let getSpotify = function(songName) {
   if (songName === undefined) {
-    songName = "The sign";
+    songName = "The sign Ace of Base";
   }
   spotify.search(
     {
