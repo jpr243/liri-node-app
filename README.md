@@ -24,6 +24,9 @@ This shows the following information about the song:
     
     Note:  If no song selected the program defaults to "The Sign" by Ace of Base
     
+    <img src="images/spotify-this-song.gif" height="400" alt="Screenshot"/> 
+    <img src="images/the-sign.gif" height="400" alt="Screenshot"/> 
+    
 ## movie-this
 
 This outputs the following information about the movie:
@@ -38,8 +41,11 @@ This outputs the following information about the movie:
     
     Note:  If no movie selected the program defaults to "Mr Nobody" 
     
+    <img src="images/movie-this.gif" height="400" alt="Screenshot"/> 
+    
 ## do-what-it-says
 
-This takes in the data held in the random.txt file and uses it to call the "spotify-this-song" command
+This takes in the data held in the random.txt file and uses it to call the "spotify-this-song" command.  The text can be changed by the user in the random.txt file to call "movie-this" or "concert-this" functions. 
 
+<img src="images/do-it.gif" height="400" alt="Screenshot"/> 
 
