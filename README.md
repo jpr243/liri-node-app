@@ -10,7 +10,7 @@ This searches the Bands in Town Artist Events AP for an artist and renders the f
     Date of the Event (using moment format "MM/DD/YYY")
     
   
-  ![Image of Concert-This](/images/concert-this.gif)
+ <img src="images/concert-this.gif" height="400" alt="Screenshot"/> 
 
 
 ## spotify-this-song
