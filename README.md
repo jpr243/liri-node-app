@@ -23,8 +23,8 @@ This shows the following information about the song:
     
     Note:  If no song selected the program defaults to "The Sign" by Ace of Base
       
- <img src="images/spotify-this.gif" height="400" width="700" alt="Screenshot"/> 
- <img src="images/the-sign.gif" height="400"  alt="Screenshot"/> 
+ <img src="images/spotify-this.gif" height="400" width="600" alt="Screenshot"/> 
+ <img src="images/the-sign.gif" height="400" width="600  alt="Screenshot"/> 
     
 ## movie-this
 
